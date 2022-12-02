@@ -1,18 +1,6 @@
 with open('input.txt', 'r') as input_file:
 	puzzle_input = input_file.read().split("\n")[:-1]
 
-"""
-  X Y Z
-A
-B
-C
-"""
-rock_paper_scissor_matrix = [
-	[3, 6, 0],
-	[0, 3, 6],
-	[6, 0, 3]
-]
-
 symbol_mappings = {
 	"X" : 0,
 	"Y" : 1,
@@ -22,20 +10,21 @@ symbol_mappings = {
 	"C" : 2
 }
 
-def get_moves(round_str):
-	return [symbol_mappings[symbol] for symbol in round_str.split(" ")]
+scores_part_one = [3, 0, 6]
+
+puzzle_input = [[symbol_mappings[symbol] for symbol in round_str.split(" ")] for round_str in puzzle_input]
+
+def get_points(enemy_move, our_move):
+	distance = (enemy_move - our_move) % 3
+	# assuming the above mappings between letters A,B,C,X,Y,Z and 0..2 the modulo distance between
+	# two letters identifies wins, losses and draws, as follows: 0 = draw, 1 = loss, 2 = win
+	return scores_part_one[distance] + (our_move + 1) # the points for picking X,Y,Z are included in the mapping if we add one to it
 
 # part 1
-def get_points_part_one(round_str):
-	enemy_move, our_move = get_moves(round_str)
-	return rock_paper_scissor_matrix[enemy_move][our_move] + (our_move + 1)
+print(sum([get_points(enemy_move, our_move) for enemy_move, our_move in puzzle_input]))
 
-print(sum([get_points_part_one(round) for round in puzzle_input]))
-
-# part 2
-def get_points_part_two(round_str):
-	enemy_move, our_move = get_moves(round_str)
-	our_move = (our_move + enemy_move + 2) % 3
-	return rock_paper_scissor_matrix[enemy_move][our_move] + (our_move + 1)
-
-print(sum([get_points_part_two(round) for round in puzzle_input]))
+# part 2 - since the distance between two letters can tell us whether a round was won, we can also
+# infer that given the enemy move, we can calculate the distance needed to provoke a win/loss/draw
+# we need to mildly modify the mapping so that we can simply add our move to the enemy move to get
+# the desired result
+print(sum([get_points(enemy_move, (enemy_move + our_move + 2) % 3) for enemy_move, our_move in puzzle_input]))
