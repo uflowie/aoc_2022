@@ -3,7 +3,6 @@ import re
 with open('input.txt', 'r') as input_file:
 	puzzle_input = input_file.read().splitlines()
 
-
 def halve_string(s):
 	half_length = len(s) // 2
 	return s[:half_length], s[half_length:]
@@ -14,7 +13,6 @@ def mutual_item(first_half, second_half):
 			return item
 
 def get_priority(item):
-	# string is between a and z, so we can use the ascii value to get the priority
 	if re.match(r'^[a-z]+$', item) is not None:
 		return ord(item) - ord('a') + 1
 	else:
@@ -34,4 +32,5 @@ def get_groups(rucksacks):
 		groups.append(rucksacks[i:i+3])
 	return groups
 
+# part 2
 print(sum([get_priority(get_badge(*group)) for group in get_groups(puzzle_input)]))
