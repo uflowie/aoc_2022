@@ -12,7 +12,7 @@ def range_fully_contained(range_a, range_b):
 all_ranges = [get_ranges(a) for a in puzzle_input]
 
 # part 1
-print(sum([int(range_fully_contained(*r)) for r in all_ranges]))
+print(sum([range_fully_contained(*r) for r in all_ranges]))
 
 # part 2
 def ranges_overlap(ranges):
@@ -20,4 +20,4 @@ def ranges_overlap(ranges):
 	ranges.sort(key=lambda r: r.start)
 	return not ranges[0].stop <= ranges[1].start
 
-print(sum([int(ranges_overlap(r)) for r in all_ranges]))
+print(sum([ranges_overlap(r) for r in all_ranges]))
